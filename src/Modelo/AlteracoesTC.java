@@ -47,5 +47,10 @@ public class AlteracoesTC {
         this.Status_TC = Status_TC;
     }
 
+    @Override
+    public String toString() {
+        return getDesc_TC(); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

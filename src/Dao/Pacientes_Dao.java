@@ -79,7 +79,7 @@ public class Pacientes_Dao {
         try {
             c.conectar();
 
-            String sql = "SELECT cod_paciente FROM Paciente WHERE cod_paciente DESC LIMIT = 1;";
+            String sql = "SELECT cod_paciente FROM Paciente ORDER BY cod_paciente DESC LIMIT  1;";
 
             c.query(sql);
             while (c.getResultSet().next()) {

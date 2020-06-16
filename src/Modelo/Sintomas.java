@@ -47,5 +47,10 @@ public class Sintomas {
         this.Status_Sintoma = Status_Sintoma;
     }
 
+    @Override
+    public String toString() {
+        return getDesc_Sintoma(); //To change body of generated methods, choose Tools | Templates.
+    }
+
    
 }

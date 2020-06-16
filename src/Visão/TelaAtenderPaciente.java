@@ -6,16 +6,20 @@
 package Visão;
 
 import Controle.Atendimento_Ctrl;
-import Dao.Medico_Dao;
 import Controle.MovimentacaoUsuario_Ctrl;
 import Controle.Paciente_Ctrl;
-import Dao.Atendimento_Dao;
+import Dao.AlteracoesLaboratoriais_Dao;
+import Dao.AlteracoesTC_Dao;
 import Dao.LoginSessao_Dao;
 import Dao.MovimentacaoUsuario_Dao;
 import Dao.Pacientes_Dao;
+import Dao.Sintomas_Dao;
+import Modelo.AlteracoesLaboratoriais;
+import Modelo.AlteracoesTC;
 import Modelo.Atendimento;
 import Modelo.MovimentacaoUsuario;
 import Modelo.Paciente;
+import Modelo.Sintomas;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -47,6 +51,9 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         PegarIp();
         ObservacoesSintomas.setLineWrap(true); //Para quebrar a linha na area de texto
         ObservacoesAtendimento.setLineWrap(true); //Para quebrar a linha na area de texto
+        PreencherComboTC();
+        PreencherComboLaboratoriais();
+        PreencherComboSintomas();
     }
 
     //Pegar Ip e busca o codigo do usuario da sessao
@@ -62,6 +69,30 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
             Cod_usuario = c.getCod_usuario();
 
         });
+    }
+    //Preenche JcomboBox com a descrição do TC
+    public void PreencherComboTC() {
+        AlteracoesTC_Dao bdao = new AlteracoesTC_Dao();
+        bdao.BuscarAlteracoesTCAtivos().forEach((tc) -> {
+            jComboTC.addItem(tc);
+        });
+    
+    }
+    //Preenche JcomboBox com a descrição das ALterações Laboratoriais
+    public void PreencherComboLaboratoriais() {
+        AlteracoesLaboratoriais_Dao bdao = new AlteracoesLaboratoriais_Dao();
+        bdao.BuscarAlteracoesLaboratoriaisAtivos().forEach((tc) -> {
+            jComboLaboratoriais.addItem(tc);
+        });
+    
+    }
+    //Preenche JcomboBox com a descrição de Sintomas
+    public void PreencherComboSintomas() {
+        Sintomas_Dao bdao = new Sintomas_Dao();
+        bdao.BuscarSintomasAtivos().forEach((tc) -> {
+            jComboSintomas.addItem(tc);
+        });
+    
     }
 
     //Abre movimentação
@@ -91,7 +122,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
             MovimentacaoUsuario_Ctrl ctrl = new MovimentacaoUsuario_Ctrl();
 
             m.setTipo_movimentacao("Salvar");
-            m.setTabela_alterada("medico");
+            m.setTabela_alterada("Paciente");
             m.setCod_registro_alterado(Cod_registro);
             m.setData_Hora_movimentacao(form.format(d));
             m.setCod_usuario_movimentacao(Cod_usuario);
@@ -115,11 +146,8 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         ObservacoesAtendimento.setText("");
     }
 
-    //Salva no Banco de DADOS
-    @SuppressWarnings("empty-statement")
+    //Salva Paciente no Banco de DADOS
     public void SalvarPaciente() {
-        Atendimento a = new Atendimento();
-        Atendimento_Ctrl Actrl = new Atendimento_Ctrl();
         Paciente p = new Paciente();
         Paciente_Ctrl Pctrl = new Paciente_Ctrl();
 
@@ -147,10 +175,6 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
             SalvarMovimentacaoUsuario_Salvar();
             LimparCampos();
         }
-    }
-
-    public void BuscarUltimo() {
-            
     }
 
     /**
@@ -279,11 +303,29 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Alterações TC");
 
+        jComboTC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboTCActionPerformed(evt);
+            }
+        });
+
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setText("Alterações Laboratoriais");
 
+        jComboLaboratoriais.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboLaboratoriaisActionPerformed(evt);
+            }
+        });
+
         jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel10.setText("Sintomas");
+
+        jComboSintomas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboSintomasActionPerformed(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel11.setText("Observações dos Sintomas");
@@ -451,6 +493,24 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_FecharMouseClicked
 
+    private void jComboTCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboTCActionPerformed
+        //Metodo para trazer o código do atributo selecionado na JcomboBox
+        AlteracoesTC a = (AlteracoesTC) jComboTC.getSelectedItem();
+        TxtCodTC.setText(Integer.toString(a.getCod_TC()).trim());
+    }//GEN-LAST:event_jComboTCActionPerformed
+
+    private void jComboLaboratoriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboLaboratoriaisActionPerformed
+        //Metodo para trazer o código do atributo selecionado na JcomboBox
+        AlteracoesLaboratoriais a = (AlteracoesLaboratoriais) jComboLaboratoriais.getSelectedItem();
+        TxtCodAlteracoesLaboratoriais.setText(Integer.toString(a.getCod_Alteracoes_Laboratoriais()).trim());
+    }//GEN-LAST:event_jComboLaboratoriaisActionPerformed
+
+    private void jComboSintomasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboSintomasActionPerformed
+        //Metodo para trazer o código do atributo selecionado na JcomboBox
+        Sintomas a = (Sintomas) jComboSintomas.getSelectedItem();
+        TxtCodSintomas.setText(Integer.toString(a.getCod_Sintoma()).trim());
+    }//GEN-LAST:event_jComboSintomasActionPerformed
+
     /**
      * @param args the TxtCodMedicoarguments
      */
@@ -514,9 +574,9 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
     private javax.swing.JTextField TxtNomePaciente;
     private javax.swing.JTextField TxtProntuario;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox<String> jComboLaboratoriais;
-    private javax.swing.JComboBox<String> jComboSintomas;
-    private javax.swing.JComboBox<String> jComboTC;
+    private javax.swing.JComboBox<Object> jComboLaboratoriais;
+    private javax.swing.JComboBox<Object> jComboSintomas;
+    private javax.swing.JComboBox<Object> jComboTC;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

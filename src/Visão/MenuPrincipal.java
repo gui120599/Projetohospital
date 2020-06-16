@@ -256,6 +256,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Atender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Atender.png"))); // NOI18N
         Atender.setToolTipText("Atender um novo Paciente");
         Atender.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Atender.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AtenderMouseClicked(evt);
+            }
+        });
 
         Pacientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Pacientes.png"))); // NOI18N
         Pacientes.setToolTipText("Acompanhar os pacientes atendidos");
@@ -433,6 +438,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         TelaGerenciarAlteracoesTC m = new TelaGerenciarAlteracoesTC();
         m.setVisible(true);
     }//GEN-LAST:event_TCMouseClicked
+
+    private void AtenderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AtenderMouseClicked
+        TelaAtenderPaciente m = new TelaAtenderPaciente();
+        m.setVisible(true);
+    }//GEN-LAST:event_AtenderMouseClicked
 
     /**
      * @param args the command line arguments

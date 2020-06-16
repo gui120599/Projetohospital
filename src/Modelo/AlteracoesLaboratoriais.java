@@ -47,5 +47,10 @@ public class AlteracoesLaboratoriais {
         this.Status_Alteracoes_Laboratoriais = Status_Alteracoes_Laboratoriais;
     }
 
+    @Override
+    public String toString() {
+        return getDesc_Alteracoes_Laboratoriais(); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }
