@@ -32,10 +32,14 @@ public class Usuario_Dao {
             c.conectar();
             String sql = "INSERT INTO usuario("
                     + "login,"
-                    + "senha)"
+                    + "senha,"
+                    + "Cod_Prestador,"
+                    + "Cod_Perfil)"
                     + "VALUES("
                     + "'" + usuario.getLogin() + "',"
-                    + "'" + usuario.getSenha() + "');";
+                    + "'" + usuario.getSenha() + "',"
+                    + "'" + usuario.getCod_Prestador() + "',"
+                    + "'" + usuario.getCod_Perfil() + "');";
 
             JOptionPane.showMessageDialog(null, "Usuario salvo com sucesso!!");
             return c.queryIncluir(sql);
@@ -47,15 +51,16 @@ public class Usuario_Dao {
             c.desconectar();
         }
     }
+
     public int AtualizarUsuario(Usuario usuario) {
         Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);
         try {
             c.conectar();
             String sql = "UPDATE usuario SET "
-                    + "login = '"+ usuario.getLogin() + "',"
-                    + "senha = '"+ usuario.getSenha() + "' "
-                    + "WHERE Cod_Usuario = "+usuario.getCod_usuario()+";";
-                   
+                    + "login = '" + usuario.getLogin() + "',"
+                    + "senha = '" + usuario.getSenha() + "',"
+                    + "Cod_Perfil = '" + usuario.getCod_Perfil() + "' "
+                    + "WHERE Cod_Usuario = " + usuario.getCod_usuario() + ";";
 
             JOptionPane.showMessageDialog(null, "Usuario Atualizado com sucesso!!");
             return c.queryIncluir(sql);
@@ -99,13 +104,46 @@ public class Usuario_Dao {
         try {
             c.conectar();
 
-            String sql = "SELECT * FROM usuario ;";
+            String sql = "SELECT cod_usuario,login,desc_perfil "
+                    + "FROM usuario,perfil_usuario "
+                    + "WHERE usuario.cod_perfil = perfil_usuario.cod_perfil ;";
 
             c.query(sql);
             while (c.getResultSet().next()) {
                 Usuario u = new Usuario();
+
                 u.setCod_usuario(c.getResultSet().getInt("cod_usuario"));
                 u.setLogin(c.getResultSet().getString("login"));
+                u.setDesc_Perfil(c.getResultSet().getString("desc_perfil"));
+                usuarios.add(u);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro= " + e);
+            return usuarios;
+        } finally {
+            c.desconectar();
+        }
+        return usuarios;
+    }
+
+    public Collection<Usuario> BuscarDadosMedico(int cod_usuario) {
+        Collection<Usuario> usuarios = new ArrayList<>();
+        Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);
+        try {
+            c.conectar();
+
+            String sql = "SELECT cod_prestador,CRM_Medico,Nome_Medico "
+                    + "FROM usuario,medico "
+                    + "WHERE cod_usuario = "+ cod_usuario +" ;";
+
+            c.query(sql);
+            while (c.getResultSet().next()) {
+                Usuario u = new Usuario();
+                
+                u.setCod_Prestador(c.getResultSet().getInt("cod_prestador"));
+                u.setCRM_Medico(c.getResultSet().getString("CRM_Medico"));
+                u.setNome_Medico(c.getResultSet().getString("Nome_Medico"));
                 usuarios.add(u);
             }
 
@@ -138,7 +176,31 @@ public class Usuario_Dao {
         }
         return check;
     }
-    
+
+    public Collection<Usuario> ChecarPeril(int cod_usuario) {
+        Collection<Usuario> usuarios = new ArrayList<>();
+        Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);
+        try {
+            c.conectar();
+
+            String sql = "SELECT cod_usuario,cod_perfil FROM usuario WHERE cod_usuario = " + cod_usuario + ";";
+
+            c.query(sql);
+            while (c.getResultSet().next()) {
+                Usuario u = new Usuario();
+                u.setCod_Perfil(c.getResultSet().getInt("cod_perfil"));
+                usuarios.add(u);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro= " + e);
+            return usuarios;
+        } finally {
+            c.desconectar();
+        }
+        return usuarios;
+    }
+
     public Collection<Usuario> MostrarUltimoUsuario() {
         Collection<Usuario> usuarios = new ArrayList<>();
         Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);

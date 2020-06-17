@@ -6,13 +6,17 @@
 package Visão;
 
 import Conexão.Conexao;
+import Dao.LoginSessao_Dao;
 import Dao.TestarConexao_Dao;
+import Dao.Usuario_Dao;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,15 +35,31 @@ public class MenuPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipal
      */
-    String data, conexao, teste;
-    
+    String data, conexao, teste,ipDaMaquina;
+    int Cod_usuario,Cod_Perfil_Permitido;
     public MenuPrincipal() {
         initComponents();
         //setExtendedState(MAXIMIZED_BOTH);//Abrir tela maximizada
         this.setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lOGO HR INR_2.png")).getImage());//Icone
         MostrarHOra();
         MostrarData();
+        PegarIp();
         
+    }
+    
+      //Pegar Ip e busca o codigo do usuario da sessao
+    public void PegarIp() {
+        try {
+            ipDaMaquina = InetAddress.getLocalHost().getHostAddress();
+            //JOptionPane.showMessageDialog(this, ipDaMaquina);
+        } catch (UnknownHostException ex) {
+            JOptionPane.showMessageDialog(this, "Falha ao setar IP da máquina!!");
+        }
+        LoginSessao_Dao dao = new LoginSessao_Dao();
+        dao.BuscarSessao(ipDaMaquina).forEach((c) -> {
+            Cod_usuario = c.getCod_usuario();
+
+        });
     }
     
     public void MostrarData() {
@@ -54,6 +74,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Timer timer = new Timer(1000, new hora());
         timer.start();
         
+    }
+    
+    public void VerificarPermissaoAtenderPaciente(int Cod_usuario2) {
+        Cod_usuario2 = Cod_usuario;
+        Usuario_Dao udao = new Usuario_Dao();
+        udao.ChecarPeril(Cod_usuario2).forEach((u) -> {
+            Cod_Perfil_Permitido = u.getCod_Perfil();
+        });
+        if(Cod_Perfil_Permitido==Cod_usuario){
+            JOptionPane.showMessageDialog(null, "Usuário com permissão de acesso!!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuário sem permissão de acesso!!");
+        this.dispose();
+        }
     }
 
     /*public void TestarConexao() {
@@ -440,8 +474,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_TCMouseClicked
 
     private void AtenderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AtenderMouseClicked
-        TelaAtenderPaciente m = new TelaAtenderPaciente();
-        m.setVisible(true);
+        
+        //Metodo para fitrar o usuario se caso ele tiver permissão de acesso
+        int Cod_usuario2 = Cod_usuario;
+        Usuario_Dao udao = new Usuario_Dao();
+        udao.ChecarPeril(Cod_usuario2).forEach((u) -> {
+            Cod_Perfil_Permitido = u.getCod_Perfil();
+        });
+        if(Cod_Perfil_Permitido==1){ // 1 é o código do perfil médico
+            TelaAtenderPaciente m = new TelaAtenderPaciente();
+            m.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuário sem permissão de acesso!!");
+        }
+    
     }//GEN-LAST:event_AtenderMouseClicked
 
     /**

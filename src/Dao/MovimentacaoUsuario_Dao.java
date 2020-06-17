@@ -33,7 +33,7 @@ public class MovimentacaoUsuario_Dao {
 
             String sql = "INSERT INTO movimentacao_usuario(Cod_usuario_movimentacao)Values(" + m.getCod_usuario_movimentacao() + ");";
 
-            //JOptionPane.showMessageDialog(null, "Movimentação Aberta com sucesso");
+            JOptionPane.showMessageDialog(null, "Movimentação Aberta com sucesso");
             return c.queryIncluir(sql);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro ao Abrir movimentacao" + e);

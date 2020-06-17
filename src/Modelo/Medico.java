@@ -67,4 +67,9 @@ public class Medico {
         this.Status_Medico = Status_Medico;
     }
 
+    @Override
+    public String toString() {
+        return getNome_medico(); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

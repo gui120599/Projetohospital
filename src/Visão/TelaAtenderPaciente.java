@@ -10,10 +10,12 @@ import Controle.MovimentacaoUsuario_Ctrl;
 import Controle.Paciente_Ctrl;
 import Dao.AlteracoesLaboratoriais_Dao;
 import Dao.AlteracoesTC_Dao;
+import Dao.Atendimento_Dao;
 import Dao.LoginSessao_Dao;
 import Dao.MovimentacaoUsuario_Dao;
 import Dao.Pacientes_Dao;
 import Dao.Sintomas_Dao;
+import Dao.Usuario_Dao;
 import Modelo.AlteracoesLaboratoriais;
 import Modelo.AlteracoesTC;
 import Modelo.Atendimento;
@@ -37,6 +39,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
      */
     //Variáveis que iremos utilizar nessa tela
     int Cod_usuario;
+    int Cod_Perfil_Permitido;
     int Cod_movimentacao;
     int Cod_registro;
     String ipDaMaquina;
@@ -54,6 +57,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         PreencherComboTC();
         PreencherComboLaboratoriais();
         PreencherComboSintomas();
+        BuscarDadosMedico(Cod_usuario);
     }
 
     //Pegar Ip e busca o codigo do usuario da sessao
@@ -70,29 +74,44 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
 
         });
     }
+    
+    public void BuscarDadosMedico(int cod_usuario2){
+        cod_usuario2 = Cod_usuario;
+        Usuario_Dao udao = new Usuario_Dao();
+        
+        udao.BuscarDadosMedico(Cod_usuario).forEach((u)->{
+        txtCodMedico.setText(Integer.toString(u.getCod_Prestador()));
+        TxtNomeMedico.setText(u.getNome_Medico());
+        TxtCrmMedico.setText(u.getCRM_Medico());
+    });
+        
+    }
+
     //Preenche JcomboBox com a descrição do TC
     public void PreencherComboTC() {
         AlteracoesTC_Dao bdao = new AlteracoesTC_Dao();
         bdao.BuscarAlteracoesTCAtivos().forEach((tc) -> {
             jComboTC.addItem(tc);
         });
-    
+
     }
+
     //Preenche JcomboBox com a descrição das ALterações Laboratoriais
     public void PreencherComboLaboratoriais() {
         AlteracoesLaboratoriais_Dao bdao = new AlteracoesLaboratoriais_Dao();
         bdao.BuscarAlteracoesLaboratoriaisAtivos().forEach((tc) -> {
             jComboLaboratoriais.addItem(tc);
         });
-    
+
     }
+
     //Preenche JcomboBox com a descrição de Sintomas
     public void PreencherComboSintomas() {
         Sintomas_Dao bdao = new Sintomas_Dao();
         bdao.BuscarSintomasAtivos().forEach((tc) -> {
             jComboSintomas.addItem(tc);
         });
-    
+
     }
 
     //Abre movimentação
@@ -134,7 +153,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
 
     //Limpa Campos 
     public void LimparCampos() {
-        TxtCodMedico.setText("");
+        TxtCrmMedico.setText("");
         TxtNomeMedico.setText("");
         TxtProntuario.setText("");
         TxtNomePaciente.setText("");
@@ -164,16 +183,80 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
 
             Pctrl.SalvarPacienteCtrl(p);
             AbrirMovimentacaoUsuario();
-            
+
             //Busca o código que acabou de ser gerado para inserir na tabela de movimentação_usuario
             Pacientes_Dao udao = new Pacientes_Dao();
             udao.BuscarUltimoPaciente().forEach((u) -> {
 
                 Cod_registro = u.getCod_Paciente();
             });
-            
+
             SalvarMovimentacaoUsuario_Salvar();
             LimparCampos();
+        }
+    }
+    
+    //Salva Atendimento no Banco de Dados
+    public void SalvarAtendimento(){
+        Atendimento a = new Atendimento();
+        Atendimento_Ctrl ctrl= new Atendimento_Ctrl();
+        
+        if(TxtCodAlteracoesLaboratoriais==null || TxtCodAlteracoesLaboratoriais.getText().equals("")){
+            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem alteração laboratorial!!");
+            if(i == 0){
+                TxtCodAlteracoesLaboratoriais.setText("");
+            }else if (i == 1){
+                jComboLaboratoriais.requestFocus();
+            }
+        }
+        else if(TxtCodTC==null || TxtCodTC.getText().equals("")){
+            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem alteração TC!!");
+            if(i == 0){
+                TxtCodAlteracoesLaboratoriais.setText("");
+            }else if (i == 1){
+                jComboLaboratoriais.requestFocus();
+            }
+        }
+        else if(TxtCodSintomas==null || TxtCodSintomas.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Selecione um sintoma!!");
+            jComboSintomas.requestFocus();
+        }
+        else if(ObservacoesAtendimento.getText()==null || ObservacoesAtendimento.getText().equals("")){
+            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem observações no atendimento!!");
+            if(i == 0){
+                TxtCodAlteracoesLaboratoriais.setText("");
+            }else if (i == 1){
+                jComboLaboratoriais.requestFocus();
+            }
+        }
+        else if(ObservacoesSintomas.getText()==null || ObservacoesSintomas.getText().equals("")){
+            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem observações de sintomas!!");
+            if(i == 0){
+                TxtCodAlteracoesLaboratoriais.setText("");
+            }else if (i == 1){
+                jComboLaboratoriais.requestFocus();
+            }
+        }else{
+            a.setCod_Medico(Integer.parseInt(txtCodMedico.getText()));
+            a.setProntuario(Integer.parseInt(TxtProntuario.getText()));
+            a.setCod_Alteracoes_Laboratoriais(Integer.parseInt(TxtCodAlteracoesLaboratoriais.getText()));
+            a.setCod_TC(Integer.parseInt(TxtCodTC.getText()));
+            a.setCod_Sintomas(Integer.parseInt(TxtCodSintomas.getText()));
+            a.setObservacoes_Atendimento(ObservacoesAtendimento.getText());
+            a.setObservacoes_Sintomas(ObservacoesSintomas.getText());
+            
+            ctrl.SalvarAtendimentoCtrl(a);
+            AbrirMovimentacaoUsuario();
+
+            //Busca o código que acabou de ser gerado para inserir na tabela de movimentação_usuario
+            Atendimento_Dao udao = new Atendimento_Dao();
+            udao.BuscarUltmoAtendimento().forEach((u) -> {
+
+                Cod_registro = u.getCod_Atendimento();
+            });
+
+            SalvarMovimentacaoUsuario_Salvar();
+            this.dispose();
         }
     }
 
@@ -192,7 +275,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        TxtCodMedico = new javax.swing.JTextField();
+        TxtCrmMedico = new javax.swing.JTextField();
         Fechar = new javax.swing.JLabel();
         TxtNomeMedico = new javax.swing.JTextField();
         Salvar = new javax.swing.JLabel();
@@ -218,6 +301,8 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         ObservacoesAtendimento = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
+        txtCodMedico = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sistema de Monitoramento COVID-19");
@@ -260,7 +345,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Nome do Médico");
 
-        TxtCodMedico.setEditable(false);
+        TxtCrmMedico.setEditable(false);
 
         Fechar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Fechar.png"))); // NOI18N
         Fechar.setToolTipText("Fechar Tela");
@@ -343,6 +428,11 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         ObservacoesAtendimento.setWrapStyleWord(true);
         jScrollPane1.setViewportView(ObservacoesAtendimento);
 
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel12.setText("Código Médico");
+
+        txtCodMedico.setEditable(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -391,29 +481,36 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
                                 .addComponent(jLabel10)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel8))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(TxtProntuario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(TxtNomePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtCodMedico))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                         .addGap(1, 1, 1)
                                         .addComponent(jLabel6))
-                                    .addComponent(TxtCodMedico, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(TxtCrmMedico, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(TxtNomeMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel8))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(TxtProntuario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TxtNomePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))))
+                                    .addComponent(jLabel3))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -427,11 +524,13 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel12))
                 .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TxtCodMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TxtNomeMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TxtCrmMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtNomeMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCodMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -487,6 +586,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
 
     private void SalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalvarMouseClicked
         SalvarPaciente();
+        SalvarAtendimento();
     }//GEN-LAST:event_SalvarMouseClicked
 
     private void FecharMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FecharMouseClicked
@@ -567,9 +667,9 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
     private javax.swing.JTextArea ObservacoesSintomas;
     private javax.swing.JLabel Salvar;
     private javax.swing.JTextField TxtCodAlteracoesLaboratoriais;
-    private javax.swing.JTextField TxtCodMedico;
     private javax.swing.JTextField TxtCodSintomas;
     private javax.swing.JTextField TxtCodTC;
+    private javax.swing.JTextField TxtCrmMedico;
     private javax.swing.JTextField TxtNomeMedico;
     private javax.swing.JTextField TxtNomePaciente;
     private javax.swing.JTextField TxtProntuario;
@@ -580,6 +680,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -593,6 +694,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField txtCodMedico;
     private javax.swing.JFormattedTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 }

@@ -93,6 +93,28 @@ public class Atendimento_Dao {
         }
         return ms;
     }
+    public Collection<Atendimento> BuscarUltmoAtendimento() {
+        Collection<Atendimento> ms = new ArrayList<>();
+        Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);
+        try {
+            c.conectar();
+
+            String sql = "SELECT * FROM Atendimento ORDER BY cod_Atendimento DESC LIMIT 1;";
+
+            c.query(sql);
+            while (c.getResultSet().next()) {
+                Atendimento m = new Atendimento();
+                m.setCod_Atendimento(c.getResultSet().getInt("Cod_Atendimento"));
+                ms.add(m);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao Buscar: " + e);
+            return ms;
+        } finally {
+            c.desconectar();
+        }
+        return ms;
+    }
 
     //Método Atualizar
     public int AtualizarAtendimento(Atendimento a) {

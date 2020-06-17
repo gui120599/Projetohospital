@@ -56,7 +56,7 @@ public class TelaGerenciarAlteracoesLaboratoriais extends javax.swing.JFrame {
         LoginSessao_Dao dao = new LoginSessao_Dao();
         dao.BuscarSessao(ipDaMaquina).forEach((c) -> {
             Cod_usuario = c.getCod_usuario();
-        
+        JOptionPane.showMessageDialog(null, Cod_usuario);
         });
     }
 
@@ -72,7 +72,7 @@ public class TelaGerenciarAlteracoesLaboratoriais extends javax.swing.JFrame {
         //Pega o cod da movimentação que acabou de ser aberta nas linhas de cima
         dao.BuscarUltimaMovimentacao().forEach((t) -> {
             Cod_movimentacao = t.getCod_movimentacao();
-            //JOptionPane.showMessageDialog(null, Cod_movimentacao);
+            JOptionPane.showMessageDialog(null, Cod_movimentacao);
         });
 
     }
