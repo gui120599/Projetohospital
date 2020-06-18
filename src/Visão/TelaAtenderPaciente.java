@@ -47,6 +47,8 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
     //Pega data do comutador e faz Converção para o padrão do mysql
     Date d = new Date();
     SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat data = new SimpleDateFormat("yyyy-MM-dd ");
+    SimpleDateFormat hora = new SimpleDateFormat("hh:mm:ss");
 
     public TelaAtenderPaciente() {
         initComponents();
@@ -58,6 +60,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
         PreencherComboLaboratoriais();
         PreencherComboSintomas();
         BuscarDadosMedico(Cod_usuario);
+        TxtProntuario.requestFocus();
     }
 
     //Pegar Ip e busca o codigo do usuario da sessao
@@ -74,17 +77,17 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
 
         });
     }
-    
-    public void BuscarDadosMedico(int cod_usuario2){
+
+    public void BuscarDadosMedico(int cod_usuario2) {
         cod_usuario2 = Cod_usuario;
         Usuario_Dao udao = new Usuario_Dao();
-        
-        udao.BuscarDadosMedico(Cod_usuario).forEach((u)->{
-        txtCodMedico.setText(Integer.toString(u.getCod_Prestador()));
-        TxtNomeMedico.setText(u.getNome_Medico());
-        TxtCrmMedico.setText(u.getCRM_Medico());
-    });
-        
+
+        udao.BuscarDadosMedico(Cod_usuario).forEach((u) -> {
+            txtCodMedico.setText(Integer.toString(u.getCod_Prestador()));
+            TxtNomeMedico.setText(u.getNome_Medico());
+            TxtCrmMedico.setText(u.getCRM_Medico());
+        });
+
     }
 
     //Preenche JcomboBox com a descrição do TC
@@ -133,7 +136,7 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
     }
 
     //Salva movimentação
-    public void SalvarMovimentacaoUsuario_Salvar() {
+    public void SalvarMovimentacaoUsuario_SalvarPaciente() {
         if (Cod_movimentacao == 0) {
             JOptionPane.showMessageDialog(null, "Não deu tempo!!");
         } else {
@@ -142,6 +145,25 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
 
             m.setTipo_movimentacao("Salvar");
             m.setTabela_alterada("Paciente");
+            m.setCod_registro_alterado(Cod_registro);
+            m.setData_Hora_movimentacao(form.format(d));
+            m.setCod_usuario_movimentacao(Cod_usuario);
+            m.setCod_movimentacao(Cod_movimentacao);
+            ctrl.SalvarMovimentacaoCtrl(m);
+        }
+
+    }
+
+    //Salva movimentação
+    public void SalvarMovimentacaoUsuario_SalvarAtendimento() {
+        if (Cod_movimentacao == 0) {
+            JOptionPane.showMessageDialog(null, "Não deu tempo!!");
+        } else {
+            MovimentacaoUsuario m = new MovimentacaoUsuario();
+            MovimentacaoUsuario_Ctrl ctrl = new MovimentacaoUsuario_Ctrl();
+
+            m.setTipo_movimentacao("Salvar");
+            m.setTabela_alterada("Atendimento");
             m.setCod_registro_alterado(Cod_registro);
             m.setData_Hora_movimentacao(form.format(d));
             m.setCod_usuario_movimentacao(Cod_usuario);
@@ -191,52 +213,20 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
                 Cod_registro = u.getCod_Paciente();
             });
 
-            SalvarMovimentacaoUsuario_Salvar();
-            LimparCampos();
+            SalvarMovimentacaoUsuario_SalvarPaciente();
+
         }
     }
-    
+
     //Salva Atendimento no Banco de Dados
-    public void SalvarAtendimento(){
+    public void SalvarAtendimento() {
         Atendimento a = new Atendimento();
-        Atendimento_Ctrl ctrl= new Atendimento_Ctrl();
-        
-        if(TxtCodAlteracoesLaboratoriais==null || TxtCodAlteracoesLaboratoriais.getText().equals("")){
-            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem alteração laboratorial!!");
-            if(i == 0){
-                TxtCodAlteracoesLaboratoriais.setText("");
-            }else if (i == 1){
-                jComboLaboratoriais.requestFocus();
-            }
-        }
-        else if(TxtCodTC==null || TxtCodTC.getText().equals("")){
-            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem alteração TC!!");
-            if(i == 0){
-                TxtCodAlteracoesLaboratoriais.setText("");
-            }else if (i == 1){
-                jComboLaboratoriais.requestFocus();
-            }
-        }
-        else if(TxtCodSintomas==null || TxtCodSintomas.getText().equals("")){
+        Atendimento_Ctrl ctrl = new Atendimento_Ctrl();
+        if (TxtCodSintomas == null || TxtCodSintomas.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Selecione um sintoma!!");
             jComboSintomas.requestFocus();
-        }
-        else if(ObservacoesAtendimento.getText()==null || ObservacoesAtendimento.getText().equals("")){
-            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem observações no atendimento!!");
-            if(i == 0){
-                TxtCodAlteracoesLaboratoriais.setText("");
-            }else if (i == 1){
-                jComboLaboratoriais.requestFocus();
-            }
-        }
-        else if(ObservacoesSintomas.getText()==null || ObservacoesSintomas.getText().equals("")){
-            int i = JOptionPane.showConfirmDialog(null, "Deseja prosseguir com o atentimento sem observações de sintomas!!");
-            if(i == 0){
-                TxtCodAlteracoesLaboratoriais.setText("");
-            }else if (i == 1){
-                jComboLaboratoriais.requestFocus();
-            }
-        }else{
+
+        } else {
             a.setCod_Medico(Integer.parseInt(txtCodMedico.getText()));
             a.setProntuario(Integer.parseInt(TxtProntuario.getText()));
             a.setCod_Alteracoes_Laboratoriais(Integer.parseInt(TxtCodAlteracoesLaboratoriais.getText()));
@@ -244,19 +234,35 @@ public class TelaAtenderPaciente extends javax.swing.JFrame {
             a.setCod_Sintomas(Integer.parseInt(TxtCodSintomas.getText()));
             a.setObservacoes_Atendimento(ObservacoesAtendimento.getText());
             a.setObservacoes_Sintomas(ObservacoesSintomas.getText());
+            a.setData_Atendimento(data.format(d));
+            a.setHora_Atendimento(hora.format(d));
             
-            ctrl.SalvarAtendimentoCtrl(a);
-            AbrirMovimentacaoUsuario();
+            
+            int i = JOptionPane.showConfirmDialog(null, "Revisão do Atendimento: \n"
+                    + "CRM: " + TxtCrmMedico.getText() + " Médico: " + TxtNomeMedico.getText() + "\n"
+                    + "Prontuário: " + TxtProntuario.getText() + " Paciente: " + TxtNomePaciente.getText() + "\n"
+                    + "Alterações Laboratoriais: " + jComboLaboratoriais.getSelectedItem() + "\n"
+                    + "Alterações TC: "+jComboTC.getSelectedItem()+"\n"
+                    + "Sintoma: "+jComboSintomas.getSelectedItem()+"\n"
+                    + "Deseja finalizar o atentimento?");
+            if (i == 0) {
+                ctrl.SalvarAtendimentoCtrl(a);
+                AbrirMovimentacaoUsuario();
 
-            //Busca o código que acabou de ser gerado para inserir na tabela de movimentação_usuario
-            Atendimento_Dao udao = new Atendimento_Dao();
-            udao.BuscarUltmoAtendimento().forEach((u) -> {
+                //Busca o código que acabou de ser gerado para inserir na tabela de movimentação_usuario
+                Atendimento_Dao udao = new Atendimento_Dao();
+                udao.BuscarUltmoAtendimento().forEach((u) -> {
 
-                Cod_registro = u.getCod_Atendimento();
-            });
+                    Cod_registro = u.getCod_Atendimento();
+                });
 
-            SalvarMovimentacaoUsuario_Salvar();
-            this.dispose();
+                SalvarMovimentacaoUsuario_SalvarAtendimento();
+                this.dispose();
+
+            } else if (i == 1) {
+                TxtProntuario.requestFocus();
+            }
+
         }
     }
 

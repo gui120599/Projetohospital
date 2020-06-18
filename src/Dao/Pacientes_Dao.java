@@ -37,7 +37,7 @@ public class Pacientes_Dao {
                     + "" + a.getProntuario()+ ","
                     + "'" + a.getNome_Paciente()+ "',"
                     + "'"+a.getTelefone_Paciente()+"');";
-            JOptionPane.showMessageDialog(null, "Paciente salvo com sucesso!");
+            //JOptionPane.showMessageDialog(null, "Paciente salvo com sucesso!");
             return c.queryIncluir(sql);
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(null, "Erro ao Salvar: " + e);
