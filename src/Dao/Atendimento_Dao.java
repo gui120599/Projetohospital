@@ -34,7 +34,7 @@ public class Atendimento_Dao {
             c.conectar();
             String sql = "INSERT INTO Atendimento("
                     + "Prontuario,"
-                    + "Cod_Medico,"
+                    + "Cod_Colaborador,"
                     + "Cod_Alteracoes_TC,"
                     + "Cod_Alteracoes_Laboratoriais,"
                     + "Cod_Sintoma,"
@@ -43,7 +43,7 @@ public class Atendimento_Dao {
                     + "Hora_Atendimento,"
                     + "Observacoes_Atendimento) VALUES("
                     + "" + a.getProntuario() + ","
-                    + "" + a.getCod_Medico() + ","
+                    + "" + a.getCod_Colaborador() + ","
                     + "" + a.getCod_TC() + ","
                     + "" + a.getCod_Alteracoes_Laboratoriais() + ","
                     + "" + a.getCod_Sintomas() + ","
@@ -74,7 +74,7 @@ public class Atendimento_Dao {
                 Atendimento m = new Atendimento();
                 m.setCod_Atendimento(c.getResultSet().getInt("Cod_Atendimento"));
                 m.setProntuario(c.getResultSet().getInt("Prontuario"));
-                m.setCod_Medico(c.getResultSet().getInt("Cod_Medico"));
+                m.setCod_Colaborador(c.getResultSet().getInt("Cod_Colaborador"));
                 m.setCod_TC(c.getResultSet().getInt("Cod_TC"));
                 m.setCod_Alteracoes_Laboratoriais(c.getResultSet().getInt("Cod_Alteracoes_Laboratoriais"));
                 m.setCod_Sintomas(c.getResultSet().getInt("Cod_Sintomas"));
@@ -123,7 +123,7 @@ public class Atendimento_Dao {
             c.conectar();
             String sql = "UPDATE Atendimento SET"
                     + "Prontuario = " + a.getProntuario() + ","
-                    + "Cod_Medico = " + a.getCod_Medico() + ","
+                    + "Cod_Colaborador = " + a.getCod_Colaborador() + ","
                     + "Cod_TC = " + a.getCod_TC() + ","
                     + "Cod_Alteracoes_Laboratoriais = " + a.getCod_Alteracoes_Laboratoriais() + ","
                     + "Cod_Sintomas = " + a.getCod_Sintomas() + ","

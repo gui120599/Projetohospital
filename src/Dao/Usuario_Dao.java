@@ -133,17 +133,17 @@ public class Usuario_Dao {
         try {
             c.conectar();
 
-            String sql = "SELECT cod_prestador,CRM_Medico,Nome_Medico "
-                    + "FROM usuario,medico "
+            String sql = "SELECT cod_colaborador,CRM_Medico,Nome_Colaborador "
+                    + "FROM usuario,colaborador "
                     + "WHERE cod_usuario = "+ cod_usuario +" ;";
 
             c.query(sql);
             while (c.getResultSet().next()) {
                 Usuario u = new Usuario();
                 
-                u.setCod_Prestador(c.getResultSet().getInt("cod_prestador"));
+                u.setCod_Prestador(c.getResultSet().getInt("cod_Colaborador"));
                 u.setCRM_Medico(c.getResultSet().getString("CRM_Medico"));
-                u.setNome_Medico(c.getResultSet().getString("Nome_Medico"));
+                u.setNome_Medico(c.getResultSet().getString("Nome_Colaborador"));
                 usuarios.add(u);
             }
 
@@ -177,7 +177,7 @@ public class Usuario_Dao {
         return check;
     }
 
-    public Collection<Usuario> ChecarPeril(int cod_usuario) {
+    public Collection<Usuario> ChecarPerfil(int cod_usuario) {
         Collection<Usuario> usuarios = new ArrayList<>();
         Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);
         try {

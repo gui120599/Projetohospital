@@ -12,7 +12,7 @@ package Modelo;
 public class Atendimento {
     private int Cod_Atendimento;
     private int Prontuario;
-    private int Cod_Medico;
+    private int Cod_Colaborador;
     private int Cod_TC;
     private int Cod_Alteracoes_Laboratoriais;
     private int Cod_Sintomas;
@@ -24,10 +24,10 @@ public class Atendimento {
     public Atendimento() {
     }
 
-    public Atendimento(int Cod_Atendimento, int Prontuario, int Cod_Medico, int Cod_TC, int Cod_Alteracoes_Laboratoriais, int Cod_Sintomas, String Observacoes_Sintomas, String Data_Atendimento, String Hora_Atendimento, String Observacoes_Atendimento) {
+    public Atendimento(int Cod_Atendimento, int Prontuario, int Cod_Colaborador, int Cod_TC, int Cod_Alteracoes_Laboratoriais, int Cod_Sintomas, String Observacoes_Sintomas, String Data_Atendimento, String Hora_Atendimento, String Observacoes_Atendimento) {
         this.Cod_Atendimento = Cod_Atendimento;
         this.Prontuario = Prontuario;
-        this.Cod_Medico = Cod_Medico;
+        this.Cod_Colaborador = Cod_Colaborador;
         this.Cod_TC = Cod_TC;
         this.Cod_Alteracoes_Laboratoriais = Cod_Alteracoes_Laboratoriais;
         this.Cod_Sintomas = Cod_Sintomas;
@@ -53,12 +53,12 @@ public class Atendimento {
         this.Prontuario = Prontuario;
     }
 
-    public int getCod_Medico() {
-        return Cod_Medico;
+    public int getCod_Colaborador() {
+        return Cod_Colaborador;
     }
 
-    public void setCod_Medico(int Cod_Medico) {
-        this.Cod_Medico = Cod_Medico;
+    public void setCod_Colaborador(int Cod_Colaborador) {
+        this.Cod_Colaborador = Cod_Colaborador;
     }
 
     public int getCod_TC() {

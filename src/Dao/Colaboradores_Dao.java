@@ -31,16 +31,14 @@ public class Colaboradores_Dao {
         Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);
         try {
             c.conectar();
-            String sql = "INSERT INTO Medico("
+            String sql = "INSERT INTO colaborador("
                     + "CRM_Medico,"
-                    + "Nome_Medico,"
-                    + "Telefone_Medico,"
-                    + "Cargo"
-                    + "Status_Medico) VALUES("
+                    + "Nome_Colaborador,"
+                    + "Telefone_Colaborador,"
+                    + "Status_Colaborador) VALUES("
                     + "'" + a.getCRM_medico() + "',"
                     + "'" + a.getNome_colaborador() + "',"
                     + "'" + a.getTelefone_colaborador() + "',"
-                    + "'" + a.getCargo() + "',"
                     + "" + a.getStatus_colaborador() + ");";
             JOptionPane.showMessageDialog(null, "Médico salvo com sucesso!");
             return c.queryIncluir(sql);
@@ -58,15 +56,15 @@ public class Colaboradores_Dao {
         try {
             c.conectar();
 
-            String sql = "SELECT * FROM Medico WHERE Status_Medico = 1;";
+            String sql = "SELECT * FROM colaborador WHERE Status_Colaborador = 1;";
 
             c.query(sql);
             while (c.getResultSet().next()) {
                 Colaboradores m = new Colaboradores();
-                m.setCod_colaborador(c.getResultSet().getInt("Cod_Medico"));
+                m.setCod_colaborador(c.getResultSet().getInt("Cod_Colaborador"));
                 m.setCRM_medico(c.getResultSet().getString("CRM_Medico"));
-                m.setNome_colaborador(c.getResultSet().getString("Nome_Medico"));
-                m.setTelefone_colaborador(c.getResultSet().getString("Telefone_Medico"));
+                m.setNome_colaborador(c.getResultSet().getString("Nome_Colaborador"));
+                m.setTelefone_colaborador(c.getResultSet().getString("Telefone_Colaborador"));
 
                 ms.add(m);
             }
@@ -86,12 +84,12 @@ public class Colaboradores_Dao {
         try {
             c.conectar();
 
-            String sql = "SELECT Cod_Medico FROM Medico ORDER BY Cod_Medico DESC LIMIT 1;";
+            String sql = "SELECT Cod_Colaborador FROM colaborador ORDER BY Cod_Colaborador DESC LIMIT 1;";
 
             c.query(sql);
             while (c.getResultSet().next()) {
                 Colaboradores m = new Colaboradores();
-                m.setCod_colaborador(c.getResultSet().getInt("Cod_Medico"));
+                m.setCod_colaborador(c.getResultSet().getInt("Cod_Colaborador"));
 
                 ms.add(m);
             }
@@ -110,12 +108,12 @@ public class Colaboradores_Dao {
         Conexao c = new Conexao(Tipo_Banco, IP_Banco, Porta_Banco, Nome_Banco, Usuario_Banco, Senha_Banco);
         try {
             c.conectar();
-            String sql = "UPDATE Medico SET"
+            String sql = "UPDATE colaborador SET"
                     + "CRM_Medico =' " + a.getCRM_medico() + "',"
-                    + "Nome_Medico =' " + a.getNome_colaborador()+ "',"
-                    + "Telefone_Medico =' " + a.getTelefone_colaborador()+ "',"
-                    + "Status_Medico= " + a.getStatus_colaborador()+ " "
-                    + " WHERE Cod_Medico = " + a.getCod_colaborador()+ " ;";
+                    + "Nome_Colaborador =' " + a.getNome_colaborador()+ "',"
+                    + "Telefone_Colaborador =' " + a.getTelefone_colaborador()+ "',"
+                    + "Status_Colaborador= " + a.getStatus_colaborador()+ " "
+                    + " WHERE Cod_Colaborador = " + a.getCod_colaborador()+ " ;";
             qtdRegistrosAfetados = c.queryUpdate(sql);
             return qtdRegistrosAfetados;
         } catch (Exception e) {

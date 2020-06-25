@@ -79,7 +79,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public void VerificarPermissaoAtenderPaciente(int Cod_usuario2) {
         Cod_usuario2 = Cod_usuario;
         Usuario_Dao udao = new Usuario_Dao();
-        udao.ChecarPeril(Cod_usuario2).forEach((u) -> {
+        udao.ChecarPerfil(Cod_usuario2).forEach((u) -> {
             Cod_Perfil_Permitido = u.getCod_Perfil();
         });
         if(Cod_Perfil_Permitido==Cod_usuario){
@@ -478,7 +478,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         //Metodo para fitrar o usuario se caso ele tiver permissão de acesso
         int Cod_usuario2 = Cod_usuario;
         Usuario_Dao udao = new Usuario_Dao();
-        udao.ChecarPeril(Cod_usuario2).forEach((u) -> {
+        udao.ChecarPerfil(Cod_usuario2).forEach((u) -> {
             Cod_Perfil_Permitido = u.getCod_Perfil();
         });
         if(Cod_Perfil_Permitido==1){ // 1 é o código do perfil médico

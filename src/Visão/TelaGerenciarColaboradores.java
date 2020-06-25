@@ -151,7 +151,7 @@ public class TelaGerenciarColaboradores extends javax.swing.JFrame {
             } else {
                 a.setStatus_colaborador(true);
             }
-            ctrl.SalvarLaboratorialCtlr(a);
+            ctrl.SalvarColaboradorCtlr(a);
             AbrirMovimentacaoUsuario();
 
             //Busca o código que acabou de ser gerado para inserir na tabela de movimentação_usuario

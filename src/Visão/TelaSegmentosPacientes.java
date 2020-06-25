@@ -192,7 +192,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
             jComboSintomas.requestFocus();
 
         } else {
-            a.setCod_Medico(Integer.parseInt(txtCodMedico.getText()));
+            a.setCod_Colaborador(Integer.parseInt(txtCodMedico.getText()));
             a.setProntuario(Integer.parseInt(TxtProntuario.getText()));
             a.setCod_Alteracoes_Laboratoriais(Integer.parseInt(TxtCodAlteracoesLaboratoriais.getText()));
             a.setCod_TC(Integer.parseInt(TxtCodTC.getText()));

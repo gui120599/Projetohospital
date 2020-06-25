@@ -13,10 +13,10 @@ import Modelo.Colaboradores;
  * @author Suporte T.I 2
  */
 public class Colaboradores_Ctrl {
-    public int SalvarLaboratorialCtlr(Colaboradores Al){
+    public int SalvarColaboradorCtlr(Colaboradores Al){
         return new Colaboradores_Dao().SalvarMedico(Al);
     }
-    public int AtualizarLaboratorialCtlr(Colaboradores Al){
+    public int AtualizarColaboradorCtlr(Colaboradores Al){
         return new Colaboradores_Dao().AtualizarMedico(Al);
     }
 }
