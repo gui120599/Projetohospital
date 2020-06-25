@@ -122,7 +122,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Laboratoriais = new javax.swing.JLabel();
         TC = new javax.swing.JLabel();
         Usuario = new javax.swing.JLabel();
-        Médico = new javax.swing.JLabel();
+        Colaboradores = new javax.swing.JLabel();
         Sintomas = new javax.swing.JLabel();
         Atalhos = new javax.swing.JPanel();
         Intranet = new javax.swing.JLabel();
@@ -194,12 +194,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        Médico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Medico.png"))); // NOI18N
-        Médico.setToolTipText("Gerenciar Médicos");
-        Médico.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Médico.addMouseListener(new java.awt.event.MouseAdapter() {
+        Colaboradores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Colaboradores.png"))); // NOI18N
+        Colaboradores.setToolTipText("Gerenciar Colaboradores");
+        Colaboradores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Colaboradores.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                MédicoMouseClicked(evt);
+                ColaboradoresMouseClicked(evt);
             }
         });
 
@@ -226,7 +226,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(Usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(Médico, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Colaboradores, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         CadastrosGeraisLayout.setVerticalGroup(
@@ -234,7 +234,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(CadastrosGeraisLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(CadastrosGeraisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Médico, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Colaboradores, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TC, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Laboratoriais, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -463,10 +463,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         m.setVisible(true);
     }//GEN-LAST:event_SintomasMouseClicked
 
-    private void MédicoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MédicoMouseClicked
-        TelaGerenciarMedicos m = new TelaGerenciarMedicos();
+    private void ColaboradoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ColaboradoresMouseClicked
+        TelaGerenciarColaboradores m = new TelaGerenciarColaboradores();
         m.setVisible(true);
-    }//GEN-LAST:event_MédicoMouseClicked
+    }//GEN-LAST:event_ColaboradoresMouseClicked
 
     private void TCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TCMouseClicked
         TelaGerenciarAlteracoesTC m = new TelaGerenciarAlteracoesTC();
@@ -532,13 +532,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel Avisos;
     private javax.swing.JPanel CadastrosGerais;
     private javax.swing.JLabel Calendario;
+    private javax.swing.JLabel Colaboradores;
     private javax.swing.JLabel Créditos;
     private javax.swing.JLabel Data;
     private javax.swing.JLabel Hora;
     private javax.swing.JLabel Intranet;
     private javax.swing.JLabel Laboratoriais;
     private javax.swing.JLabel LogoSistem;
-    private javax.swing.JLabel Médico;
     private javax.swing.JLabel Pacientes;
     private javax.swing.JPanel PainelLogos;
     private javax.swing.JPanel PainelPrincipal;

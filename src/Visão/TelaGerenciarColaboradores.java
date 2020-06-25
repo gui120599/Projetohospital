@@ -5,12 +5,12 @@
  */
 package Visão;
 
-import Controle.Medicos_Ctrl;
-import Dao.Medico_Dao;
+import Controle.Colaboradores_Ctrl;
+import Dao.Colaboradores_Dao;
 import Controle.MovimentacaoUsuario_Ctrl;
 import Dao.LoginSessao_Dao;
 import Dao.MovimentacaoUsuario_Dao;
-import Modelo.Medico;
+import Modelo.Colaboradores;
 import Modelo.MovimentacaoUsuario;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Suporte T.I 2
  */
-public class TelaGerenciarMedicos extends javax.swing.JFrame {
+public class TelaGerenciarColaboradores extends javax.swing.JFrame {
 
     /**
      * Creates new form TelaGerenciarAlteracoesLaboratoriais
@@ -39,7 +39,7 @@ public class TelaGerenciarMedicos extends javax.swing.JFrame {
     Date d = new Date();
     SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-    public TelaGerenciarMedicos() {
+    public TelaGerenciarColaboradores() {
         initComponents();
         this.setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lOGO HR INR_2.png")).getImage());//Icone
         Codigo.setSelected(true);//Aciona BOTAO DE PESQUISA
@@ -107,14 +107,14 @@ public class TelaGerenciarMedicos extends javax.swing.JFrame {
         jTLaboratorial.getColumnModel().getColumn(3).setPreferredWidth(5);
         DefaultTableModel modelo = (DefaultTableModel) jTLaboratorial.getModel();
         modelo.setNumRows(0);
-        Medico_Dao bdao = new Medico_Dao();
+        Colaboradores_Dao bdao = new Colaboradores_Dao();
 
         bdao.BuscarMedicoAtivos().forEach((b) -> {
             modelo.addRow(new Object[]{
-                b.getCod_medico(),
+                b.getCod_colaborador(),
                 b.getCRM_medico(),
-                b.getNome_medico(),
-                b.getTelefone_Medico()
+                b.getNome_colaborador(),
+                b.getTelefone_colaborador()
             });
         });
     }
@@ -131,8 +131,8 @@ public class TelaGerenciarMedicos extends javax.swing.JFrame {
     
     //Salva no Banco de DADOS
     public void Salvar() {
-        Medico a = new Medico();
-        Medicos_Ctrl ctrl = new Medicos_Ctrl();
+        Colaboradores a = new Colaboradores();
+        Colaboradores_Ctrl ctrl = new Colaboradores_Ctrl();
 
         if (TxtNomeMedico.getText() == null || TxtNomeMedico.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Informe o Nome do Médico!!");
@@ -143,22 +143,22 @@ public class TelaGerenciarMedicos extends javax.swing.JFrame {
         }
         
         else {
-            a.setNome_medico(TxtNomeMedico.getText());
+            a.setNome_colaborador(TxtNomeMedico.getText());
             a.setCRM_medico(TxtCrm.getText());
-            a.setTelefone_Medico(txtTelefone.getText());
+            a.setTelefone_colaborador(txtTelefone.getText());
             if (Inativo.isSelected()) {
-                a.setStatus_Medico(false);
+                a.setStatus_colaborador(false);
             } else {
-                a.setStatus_Medico(true);
+                a.setStatus_colaborador(true);
             }
             ctrl.SalvarLaboratorialCtlr(a);
             AbrirMovimentacaoUsuario();
 
             //Busca o código que acabou de ser gerado para inserir na tabela de movimentação_usuario
-            Medico_Dao udao = new Medico_Dao();
+            Colaboradores_Dao udao = new Colaboradores_Dao();
             udao.BuscarUltimoMedico().forEach((u) -> {
 
-                Cod_registro = u.getCod_medico();
+                Cod_registro = u.getCod_colaborador();
             });
 
             SalvarMovimentacaoUsuario_Salvar();
@@ -417,14 +417,22 @@ public class TelaGerenciarMedicos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciarMedicos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciarColaboradores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciarMedicos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciarColaboradores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciarMedicos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciarColaboradores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciarMedicos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciarColaboradores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -437,7 +445,7 @@ public class TelaGerenciarMedicos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaGerenciarMedicos().setVisible(true);
+                new TelaGerenciarColaboradores().setVisible(true);
             }
         });
     }

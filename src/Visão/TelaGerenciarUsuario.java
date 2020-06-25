@@ -8,11 +8,11 @@ package Visão;
 import Controle.MovimentacaoUsuario_Ctrl;
 import Controle.Usuario_Ctrl;
 import Dao.LoginSessao_Dao;
-import Dao.Medico_Dao;
+import Dao.Colaboradores_Dao;
 import Dao.MovimentacaoUsuario_Dao;
 import Dao.PerfilUsuario_Dao;
 import Dao.Usuario_Dao;
-import Modelo.Medico;
+import Modelo.Colaboradores;
 import Modelo.MovimentacaoUsuario;
 import Modelo.PerfilUsuario;
 import Modelo.Usuario;
@@ -128,7 +128,7 @@ public class TelaGerenciarUsuario extends javax.swing.JFrame {
     }
     
     public void PreencherComboPrestador(){
-        Medico_Dao udao = new Medico_Dao();
+        Colaboradores_Dao udao = new Colaboradores_Dao();
         udao.BuscarMedicoAtivos().forEach((u)->{
             ComboBoxPrestador.addItem(u);
         });
@@ -308,7 +308,7 @@ public class TelaGerenciarUsuario extends javax.swing.JFrame {
         txtCodPerfil.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel8.setText("Prestador");
+        jLabel8.setText("Colaborador");
 
         txtCodPrestador.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
@@ -439,8 +439,8 @@ public class TelaGerenciarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_ComboBoxPerfisActionPerformed
 
     private void ComboBoxPrestadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxPrestadorActionPerformed
-       Medico m = (Medico) ComboBoxPrestador.getSelectedItem();
-       txtCodPrestador.setText(Integer.toString(m.getCod_medico()).trim());
+       Colaboradores m = (Colaboradores) ComboBoxPrestador.getSelectedItem();
+       txtCodPrestador.setText(Integer.toString(m.getCod_colaborador()).trim());
     }//GEN-LAST:event_ComboBoxPrestadorActionPerformed
 
     /**

@@ -181,7 +181,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="Usuario" min="-2" pref="80" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="Médico" min="-2" pref="80" max="-2" attributes="0"/>
+                      <Component id="Colaboradores" min="-2" pref="80" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -191,7 +191,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="Médico" min="-2" pref="80" max="-2" attributes="0"/>
+                          <Component id="Colaboradores" min="-2" pref="80" max="-2" attributes="0"/>
                           <Component id="Usuario" min="-2" pref="80" max="-2" attributes="0"/>
                           <Component id="TC" min="-2" pref="80" max="-2" attributes="0"/>
                           <Component id="Laboratoriais" min="-2" pref="80" max="-2" attributes="0"/>
@@ -245,18 +245,18 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="UsuarioMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="M&#xe9;dico">
+            <Component class="javax.swing.JLabel" name="Colaboradores">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagens/Medico.png"/>
+                  <Image iconType="3" name="/Imagens/Colaboradores.png"/>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Gerenciar M&#xe9;dicos"/>
+                <Property name="toolTipText" type="java.lang.String" value="Gerenciar Colaboradores"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursor em Forma de M&#xe3;o"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="M&#xe9;dicoMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ColaboradoresMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="Sintomas">
