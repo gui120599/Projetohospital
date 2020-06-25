@@ -12,6 +12,7 @@ import Dao.AlteracoesTC_Dao;
 import Dao.Atendimento_Dao;
 import Dao.LoginSessao_Dao;
 import Dao.MovimentacaoUsuario_Dao;
+import Dao.Pacientes_Dao;
 import Dao.Sintomas_Dao;
 import Dao.Usuario_Dao;
 import Modelo.AlteracoesLaboratoriais;
@@ -24,6 +25,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -52,11 +54,53 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         PegarIp();
         ObservacoesSintomas.setLineWrap(true); //Para quebrar a linha na area de texto
         ObservacoesAtendimento.setLineWrap(true); //Para quebrar a linha na area de texto
+        MostrarPacientes();
+        MostrarAtendimentos();
         PreencherComboTC();
         PreencherComboLaboratoriais();
         PreencherComboSintomas();
         BuscarDadosMedico(Cod_usuario);
         TxtProntuario.requestFocus();
+    }
+
+    //carrega Tabela
+    public void MostrarPacientes() {
+        jTPacientes.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jTPacientes.getColumnModel().getColumn(1).setPreferredWidth(400);
+        jTPacientes.getColumnModel().getColumn(2).setPreferredWidth(100);
+        DefaultTableModel modelo = (DefaultTableModel) jTPacientes.getModel();
+        modelo.setNumRows(0);
+        Pacientes_Dao bdao = new Pacientes_Dao();
+
+        bdao.BuscarPaciente().forEach((b) -> {
+            modelo.addRow(new Object[]{
+                b.getProntuario(),
+                b.getNome_Paciente(),
+                b.getTelefone_Paciente()
+            });
+        });
+    }
+
+    public void MostrarAtendimentos() {
+        jTAtendimentos.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jTAtendimentos.getColumnModel().getColumn(1).setPreferredWidth(400);
+        jTAtendimentos.getColumnModel().getColumn(2).setPreferredWidth(100);
+        DefaultTableModel modelo = (DefaultTableModel) jTAtendimentos.getModel();
+        modelo.setNumRows(0);
+        
+        Atendimento_Dao bdao = new Atendimento_Dao();
+
+        bdao.BuscarAtendimentos().forEach((b) -> {
+            modelo.addRow(new Object[]{
+                b.getProntuario(),
+                b.getCod_Atendimento(),
+                b.getData_Atendimento().substring(8, 10) + "/" + 
+                b.getData_Atendimento().substring(5, 7) +"/"+ 
+                b.getData_Atendimento().substring(0, 4) +" "+
+                b.getHora_Atendimento()
+            });
+        });
+
     }
 
     //Pegar Ip e busca o codigo do usuario da sessao
@@ -70,20 +114,20 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         LoginSessao_Dao dao = new LoginSessao_Dao();
         dao.BuscarSessao(ipDaMaquina).forEach((c) -> {
             Cod_usuario = c.getCod_usuario();
-            
+
         });
     }
-    
+
     public void BuscarDadosMedico(int cod_usuario2) {
         cod_usuario2 = Cod_usuario;
         Usuario_Dao udao = new Usuario_Dao();
-        
+
         udao.BuscarDadosMedico(Cod_usuario).forEach((u) -> {
             txtCodMedico.setText(Integer.toString(u.getCod_Prestador()));
             TxtNomeMedico.setText(u.getNome_Medico());
             TxtCrmMedico.setText(u.getCRM_Medico());
         });
-        
+
     }
 
     //Preenche JcomboBox com a descrição do TC
@@ -92,7 +136,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         bdao.BuscarAlteracoesTCAtivos().forEach((tc) -> {
             jComboTC.addItem(tc);
         });
-        
+
     }
 
     //Preenche JcomboBox com a descrição das ALterações Laboratoriais
@@ -101,7 +145,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         bdao.BuscarAlteracoesLaboratoriaisAtivos().forEach((tc) -> {
             jComboLaboratoriais.addItem(tc);
         });
-        
+
     }
 
     //Preenche JcomboBox com a descrição de Sintomas
@@ -110,7 +154,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         bdao.BuscarSintomasAtivos().forEach((tc) -> {
             jComboSintomas.addItem(tc);
         });
-        
+
     }
 
     //Abre movimentação
@@ -128,7 +172,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
             Cod_movimentacao = t.getCod_movimentacao();
             //JOptionPane.showMessageDialog(null, Cod_movimentacao);
         });
-        
+
     }
 
     //Salva movimentação
@@ -138,7 +182,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         } else {
             MovimentacaoUsuario m = new MovimentacaoUsuario();
             MovimentacaoUsuario_Ctrl ctrl = new MovimentacaoUsuario_Ctrl();
-            
+
             m.setTipo_movimentacao("Salvar");
             m.setTabela_alterada("Paciente");
             m.setCod_registro_alterado(Cod_registro);
@@ -147,7 +191,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
             m.setCod_movimentacao(Cod_movimentacao);
             ctrl.SalvarMovimentacaoCtrl(m);
         }
-        
+
     }
 
     //Salva movimentação
@@ -157,7 +201,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         } else {
             MovimentacaoUsuario m = new MovimentacaoUsuario();
             MovimentacaoUsuario_Ctrl ctrl = new MovimentacaoUsuario_Ctrl();
-            
+
             m.setTipo_movimentacao("Salvar");
             m.setTabela_alterada("Atendimento");
             m.setCod_registro_alterado(Cod_registro);
@@ -166,7 +210,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
             m.setCod_movimentacao(Cod_movimentacao);
             ctrl.SalvarMovimentacaoCtrl(m);
         }
-        
+
     }
 
     //Limpa Campos 
@@ -182,7 +226,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         ObservacoesSintomas.setText("");
         ObservacoesAtendimento.setText("");
     }
-    
+
     //Salva Atendimento no Banco de Dados
     public void SalvarAtendimento() {
         Atendimento a = new Atendimento();
@@ -201,14 +245,13 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
             a.setObservacoes_Sintomas(ObservacoesSintomas.getText());
             a.setData_Atendimento(data.format(d));
             a.setHora_Atendimento(hora.format(d));
-            
-            
+
             int i = JOptionPane.showConfirmDialog(null, "Revisão do Atendimento: \n"
                     + "CRM: " + TxtCrmMedico.getText() + " Médico: " + TxtNomeMedico.getText() + "\n"
                     + "Prontuário: " + TxtProntuario.getText() + " Paciente: " + TxtNomePaciente.getText() + "\n"
                     + "Alterações Laboratoriais: " + jComboLaboratoriais.getSelectedItem() + "\n"
-                    + "Alterações TC: "+jComboTC.getSelectedItem()+"\n"
-                    + "Sintoma: "+jComboSintomas.getSelectedItem()+"\n"
+                    + "Alterações TC: " + jComboTC.getSelectedItem() + "\n"
+                    + "Sintoma: " + jComboSintomas.getSelectedItem() + "\n"
                     + "Deseja finalizar o atentimento?");
             if (i == 0) {
                 ctrl.SalvarAtendimentoCtrl(a);
@@ -289,6 +332,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         Fechar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -322,6 +366,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
             }
         });
 
+        jTPacientes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTPacientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -329,17 +374,29 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
             new String [] {
                 "Prontuário", "Nome", "Telefone"
             }
-        ));
-        jScrollPane3.setViewportView(jTPacientes);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
-        jTAtendimentos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Atendimentos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTPacientes);
+        if (jTPacientes.getColumnModel().getColumnCount() > 0) {
+            jTPacientes.getColumnModel().getColumn(0).setResizable(false);
+            jTPacientes.getColumnModel().getColumn(1).setResizable(false);
+            jTPacientes.getColumnModel().getColumn(2).setResizable(false);
+        }
+
         jTAtendimentos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTAtendimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Atendimento", "Médico"
+                "Atendimento", "Médico", "Data e Hora"
             }
         ));
         jScrollPane4.setViewportView(jTAtendimentos);
@@ -396,8 +453,8 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jRadioButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Avancar))
         );
 
@@ -648,6 +705,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void AvancarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AvancarActionPerformed
@@ -673,7 +731,7 @@ public class TelaSegmentosPacientes extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboSintomasActionPerformed
 
     private void SalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalvarMouseClicked
-        
+
         SalvarAtendimento();
     }//GEN-LAST:event_SalvarMouseClicked
 

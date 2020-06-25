@@ -75,9 +75,9 @@ public class Atendimento_Dao {
                 m.setCod_Atendimento(c.getResultSet().getInt("Cod_Atendimento"));
                 m.setProntuario(c.getResultSet().getInt("Prontuario"));
                 m.setCod_Colaborador(c.getResultSet().getInt("Cod_Colaborador"));
-                m.setCod_TC(c.getResultSet().getInt("Cod_TC"));
+                m.setCod_TC(c.getResultSet().getInt("Cod_Alteracoes_TC"));
                 m.setCod_Alteracoes_Laboratoriais(c.getResultSet().getInt("Cod_Alteracoes_Laboratoriais"));
-                m.setCod_Sintomas(c.getResultSet().getInt("Cod_Sintomas"));
+                m.setCod_Sintomas(c.getResultSet().getInt("Cod_Sintoma"));
                 m.setObservacoes_Sintomas(c.getResultSet().getString("Observacoes_Sintomas"));
                 m.setData_Atendimento(c.getResultSet().getString("Data_Atendimento"));
                 m.setHora_Atendimento(c.getResultSet().getString("Hora_Atendimento"));
